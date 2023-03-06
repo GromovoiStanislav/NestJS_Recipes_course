@@ -3,39 +3,40 @@ import {
   Entity,
   ManyToOne,
   OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
-import { Unit } from '../dto/recipe.dto';
+  PrimaryGeneratedColumn
+} from "typeorm";
+import { Unit } from "../dto/recipe.dto";
 
-@Entity({ name: 'recipe' })
+@Entity({ name: "recipe" })
 export class Recipe {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn("uuid")
   id: string;
 
   @Column()
   description: string;
 
   @OneToMany(() => Ingredient, (ingredient) => ingredient.recipe, {
+
     cascade: true,
-    eager: true,
+    eager: true
   })
   ingredients: Ingredient[];
 }
 
-@Entity({ name: 'ingredient' })
+@Entity({ name: "ingredient" })
 export class Ingredient {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn("uuid")
   id: string;
 
   @Column()
   name: string;
 
-  @Column({ type: 'varchar' })
+  @Column({ type: "varchar" })
   unit: Unit;
 
-  @Column({ type: 'integer' })
+  @Column({ type: "integer" })
   quantity: number;
 
-  @ManyToOne(() => Recipe, (recipe) => recipe.ingredients)
+  @ManyToOne(() => Recipe, (recipe) => recipe.ingredients, { onDelete: "CASCADE" })
   recipe: Recipe;
 }

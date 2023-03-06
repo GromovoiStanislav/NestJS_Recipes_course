@@ -18,7 +18,7 @@ import { RecipeModule } from './recipe/recipe.module';
         password: configService.get<string>('DB_PASSWORD'),
         database: configService.get<string>('DB_NAME'),
         entities: [Recipe, Ingredient],
-        synchronize: configService.get<boolean>('DB_SYNCHRONIZATION'),
+        synchronize: false,//configService.get<boolean>('DB_SYNCHRONIZATION'),
         logging: configService.get<boolean>('DB_LOGGING'),
       }),
       inject: [ConfigService],
