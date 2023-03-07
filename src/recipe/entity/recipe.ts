@@ -6,6 +6,7 @@ import {
   PrimaryGeneratedColumn
 } from "typeorm";
 import { Unit } from "../dto/recipe.dto";
+import { User } from "../../auth/entity/user";
 
 @Entity({ name: "recipe" })
 export class Recipe {
@@ -21,6 +22,10 @@ export class Recipe {
     eager: true
   })
   ingredients: Ingredient[];
+
+  @ManyToOne(() => User, (user) => user.recipes)
+  user: User;
+
 }
 
 @Entity({ name: "ingredient" })

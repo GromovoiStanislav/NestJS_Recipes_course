@@ -6,41 +6,54 @@ import {
   Param,
   Patch,
   Delete,
-  ParseUUIDPipe,
-} from '@nestjs/common';
-import { RecipeDto } from './dto/recipe.dto';
-import { UpdatedescriptionDto } from './dto/update-description.dto';
-import { RecipeService } from './recipe.service';
+  ParseUUIDPipe, Request, UseGuards
+} from "@nestjs/common";
+import { RecipeDto } from "./dto/recipe.dto";
+import { UpdatedescriptionDto } from "./dto/update-description.dto";
+import { RecipeService } from "./recipe.service";
+import { AccessTokenGuard } from "../auth/guard/access-token.guard";
+import { Role } from "../auth/decorators/role";
+import { UserRole } from "../auth/entity/user";
+import { RoleGuard } from "../auth/guard/authorization.guard";
 
-@Controller('recipe')
+@Controller("recipe")
 export class RecipeController {
-  constructor(private recipeService: RecipeService) {}
+  constructor(private recipeService: RecipeService) {
+  }
 
   @Get()
   async getRecipes() {
     return await this.recipeService.getRecipes();
   }
 
-  @Get('/:id')
-  async getRecipe(@Param('id', new ParseUUIDPipe()) id: string) {
+  @Get("/:id")
+  async getRecipe(@Param("id", new ParseUUIDPipe()) id: string) {
     return await this.recipeService.getRecipe(id);
   }
 
+  @UseGuards(AccessTokenGuard)
   @Post()
-  async createRecipe(@Body() recipeDto: RecipeDto) {
-    return await this.recipeService.createRecipe(recipeDto);
+  async createRecipe(@Body() recipeDto: RecipeDto, @Request() req) {
+    const { sub } = req.user;
+    return await this.recipeService.createRecipe(recipeDto, sub);
   }
 
-  @Patch('/:id')
+  @UseGuards(AccessTokenGuard)
+  @Patch("/:id")
   async updateDescription(
     @Body() { description }: UpdatedescriptionDto,
-    @Param('id', new ParseUUIDPipe()) id: string,
+    @Param("id", new ParseUUIDPipe()) id: string,
+    @Request() req
   ) {
-    return await this.recipeService.updateDescription(id, description);
+    const { sub } = req.user;
+    return await this.recipeService.updateDescription(id, description, sub);
   }
 
-  @Delete('/:id')
-  async deleteRecipe(@Param('id', new ParseUUIDPipe()) id: string) {
+
+  @Role(UserRole.ADMIN)
+  @UseGuards(AccessTokenGuard, RoleGuard)
+  @Delete("/:id")
+  async deleteRecipe(@Param("id", new ParseUUIDPipe()) id: string) {
     return await this.recipeService.deleteRecipe(id);
   }
 }
