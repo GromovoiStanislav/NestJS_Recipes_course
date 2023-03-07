@@ -23,7 +23,8 @@ export class RecipeController {
 
   @Get()
   async getRecipes() {
-    return await this.recipeService.getRecipes();
+    throw new Error("Test Error 123")
+    //return await this.recipeService.getRecipes();
   }
 
   @Get("/:id")

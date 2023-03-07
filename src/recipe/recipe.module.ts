@@ -9,6 +9,5 @@ import { User } from "../auth/entity/user";
   controllers: [RecipeController],
   providers: [RecipeService],
   imports: [TypeOrmModule.forFeature([Recipe,User])],
-  //exports: [TypeOrmModule],
 })
 export class RecipeModule {}

@@ -8,7 +8,6 @@ import { AccessTokenStrategy } from './passport-strategy/access-token.strategy';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User]), JwtModule.register({})],
-  //exports: [TypeOrmModule],
   controllers: [AuthController],
   providers: [AuthService, AccessTokenStrategy],
 })
