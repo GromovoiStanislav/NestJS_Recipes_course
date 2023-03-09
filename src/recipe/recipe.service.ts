@@ -47,4 +47,22 @@ export class RecipeService {
   async deleteRecipe(id: string): Promise<void> {
     await this.recipeRepository.delete({ id });
   }
+
+  async addFileToRecipe(file: Express.Multer.File, id: string, email: string) {
+    const recipe = await this.recipeRepository.findOneOrFail({
+      where: { id },
+      relations: ['user'],
+    });
+
+    if (recipe.user.email !== email) {
+      throw new HttpException("You cannot update recipe. It's  not yours!", 400,
+      );
+    }
+
+    const fileUrl = `${file.originalname}-${Date.now()}`;
+    await this.recipeRepository.update({ id }, { image: fileUrl });
+  }
+
+
+
 }
