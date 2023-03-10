@@ -6,6 +6,8 @@ import { Ingredient, Recipe } from './recipe/entity/recipe';
 import { RecipeModule } from './recipe/recipe.module';
 import { AuthModule } from "./auth/auth.module";
 import { User } from "./auth/entity/user";
+import { AppController } from "./app.controller";
+import { MulterModule } from "@nestjs/platform-express";
 
 @Module({
   imports: [
@@ -25,9 +27,10 @@ import { User } from "./auth/entity/user";
       }),
       inject: [ConfigService],
     }),
+    //MulterModule.register({ dest: './uploads' }),
     RecipeModule,AuthModule
   ],
-  controllers: [],
+  controllers: [AppController],
   providers: [],
 })
 export class AppModule {}
