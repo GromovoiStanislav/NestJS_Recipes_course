@@ -59,6 +59,9 @@ export class RecipeService {
       );
     }
 
+    // const bucketKey = `${file.fieldname}${Date.now()}`;
+    // const fileUrl = await this.s3Service.uploadFile(file, bucketKey);
+
     const fileUrl = `${file.originalname}-${Date.now()}`;
     await this.recipeRepository.update({ id }, { image: fileUrl });
   }
